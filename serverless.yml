@@ -1,0 +1,20 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: ${env:SERVERLESS_ORG}
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: Meetups-Api
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  stage: ${opt:stage, 'dev'}
+  region: eu-north-1
+  environment:
+    JWT_SECRET: ${env:JWT_SECRET}
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - httpApi:
+          path: /
+          method: get
