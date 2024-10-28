@@ -23,7 +23,11 @@ provider:
             - dynamodb:PutItem
             - dynamodb:UpdateItem
             - dynamodb:DeleteItem
-          Resource: "*"
+          Resource:
+            - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_TABLE}
+            - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.MEETUPS_TABLE}
+            - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_TABLE}/index/*
+            - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.MEETUPS_TABLE}/index/*
 
 package:
   individually: true
@@ -33,19 +37,19 @@ build:
     bundle: true
     minify: true
 
-functions:
-  Signup:
-    handler: functions/signup/index.handler
-    events:
-      - httpApi:
-          path: /
-          method: post
-  Login:
-    handler: functions/login/index.handler
-    events:
-      - httpApi:
-          path: /
-          method: post
+# functions:
+#   Signup:
+#     handler: functions/signup/index.handler
+#     events:
+#       - httpApi:
+#           path: /
+#           method: post
+#   Login:
+#     handler: functions/login/index.handler
+#     events:
+#       - httpApi:
+#           path: /
+#           method: post
 
 resources:
   Resources:
@@ -59,15 +63,15 @@ resources:
           - AttributeName: email
             AttributeType: S
         KeySchema:
-          - AttributeName: userId
+          - AttributeName: id
             KeyType: HASH
         GlobalSecondaryIndexes:
           - IndexName: EmailIndex
             KeySchema:
               - AttributeName: email
                 KeyType: HASH
-                Projection:
-                ProjectionType: ALL
+            Projection:
+              ProjectionType: ALL
         BillingMode: PAY_PER_REQUEST
 
     MeetupsTable:
@@ -77,9 +81,16 @@ resources:
         AttributeDefinitions:
           - AttributeName: meetupId
             AttributeType: S
+          - AttributeName: date
+            AttributeType: S
         KeySchema:
-
           - AttributeName: meetupId
             KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: DateIndex
+            KeySchema:
+              - AttributeName: date
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
         BillingMode: PAY_PER_REQUEST
-        
