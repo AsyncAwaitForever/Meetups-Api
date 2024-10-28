@@ -10,11 +10,76 @@ provider:
   region: eu-north-1
   environment:
     JWT_SECRET: ${env:JWT_SECRET}
+    USERS_TABLE: ${self:service}-users-${self:provider.stage}
+    MEETUPS_TABLE: ${self:service}-meetups-${self:provider.stage}
+    iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource: "*"
+
+package:
+  individually: true
+
+build:
+  esbuild:
+    bundle: true
+    minify: true
 
 functions:
-  hello:
-    handler: handler.hello
+  Signup:
+    handler: functions/signup/index.handler
     events:
       - httpApi:
           path: /
-          method: get
+          method: post
+  Login:
+    handler: functions/login/index.handler
+    events:
+      - httpApi:
+          path: /
+          method: post
+
+resources:
+  Resources:
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.USERS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: email
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: EmailIndex
+            KeySchema:
+              - AttributeName: email
+                KeyType: HASH
+                Projection:
+                ProjectionType: ALL
+        BillingMode: PAY_PER_REQUEST
+
+    MeetupsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.MEETUPS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: meetupId
+            AttributeType: S
+        KeySchema:
+
+          - AttributeName: meetupId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        
