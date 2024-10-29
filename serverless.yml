@@ -12,7 +12,7 @@ provider:
     JWT_SECRET: ${env:JWT_SECRET}
     USERS_TABLE: ${self:service}-users-${self:provider.stage}
     MEETUPS_TABLE: ${self:service}-meetups-${self:provider.stage}
-    RATINGS_TABLE: ${self:service}-ratings-${self:provider.stage} 
+    RATINGS_TABLE: ${self:service}-ratings-${self:provider.stage}
   iam:
     role:
       statements:
@@ -27,8 +27,10 @@ provider:
           Resource:
             - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_TABLE}
             - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.MEETUPS_TABLE}
+            - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.RATINGS_TABLE}
             - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_TABLE}/index/*
             - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.MEETUPS_TABLE}/index/*
+            - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.RATINGS_TABLE}/index/*
 
 package:
   individually: true
@@ -39,18 +41,18 @@ build:
     minify: true
 
   functions:
-   signup:
-     handler: handlers/Users/Signup/index.handler
-     events:
-       - httpApi:
-           path: /signup
-           method: post
-   login:
-     handler: handlers/Users/Login/index.handler
-     events:
-       - httpApi:
-           path: /login
-           method: post
+    signup:
+      handler: handlers/Users/Signup/index.handler
+      events:
+        - httpApi:
+            path: /signup
+            method: post
+    login:
+      handler: handlers/Users/Login/index.handler
+      events:
+        - httpApi:
+            path: /login
+            method: post
 
 resources:
   Resources:
@@ -82,35 +84,51 @@ resources:
         AttributeDefinitions:
           - AttributeName: meetupId
             AttributeType: S
-          - AttributeName: searchString  
+          - AttributeName: title
+            AttributeType: S
+          - AttributeName: category
+            AttributeType: S
+          - AttributeName: location
             AttributeType: S
         KeySchema:
           - AttributeName: meetupId
             KeyType: HASH
         GlobalSecondaryIndexes:
-          - IndexName: SearchIndex
+          - IndexName: TitleIndex
             KeySchema:
-              - AttributeName: searchString
-                KeyType: HASH  
+              - AttributeName: title
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+          - IndexName: CategoryIndex
+            KeySchema:
+              - AttributeName: category
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+          - IndexName: LocationIndex
+            KeySchema:
+              - AttributeName: location
+                KeyType: HASH
             Projection:
               ProjectionType: ALL
         BillingMode: PAY_PER_REQUEST
 
-    RatingsTable:                      
-      Type: AWS::DynamoDB::Table      
-      Properties:                       
+    RatingsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
         TableName: ${self:provider.environment.RATINGS_TABLE}
         AttributeDefinitions:
-          - AttributeName: ratingId  
+          - AttributeName: ratingId
             AttributeType: S
           - AttributeName: userId
             AttributeType: S
           - AttributeName: meetupId
             AttributeType: S
           - AttributeName: stars
-            AttributeType: N 
+            AttributeType: N
         KeySchema:
-          - AttributeName: ratingId 
+          - AttributeName: ratingId
             KeyType: HASH
         GlobalSecondaryIndexes:
           - IndexName: UserMeetupIndex
@@ -124,7 +142,6 @@ resources:
           - IndexName: StarsIndex
             KeySchema:
               - AttributeName: stars
-                KeyType: HASH 
+                KeyType: HASH
             Projection:
               ProjectionType: ALL
-
