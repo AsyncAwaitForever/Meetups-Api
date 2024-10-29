@@ -37,19 +37,19 @@ build:
     bundle: true
     minify: true
 
-# functions:
-#   Signup:
-#     handler: functions/signup/index.handler
-#     events:
-#       - httpApi:
-#           path: /
-#           method: post
-#   Login:
-#     handler: functions/login/index.handler
-#     events:
-#       - httpApi:
-#           path: /
-#           method: post
+  functions:
+   signup:
+     handler: handlers/Users/Signup/index.handler
+     events:
+       - httpApi:
+           path: /signup
+           method: post
+   login:
+     handler: handlers/Users/Login/index.handler
+     events:
+       - httpApi:
+           path: /login
+           method: post
 
 resources:
   Resources:
