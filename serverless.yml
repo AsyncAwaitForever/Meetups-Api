@@ -82,16 +82,16 @@ resources:
         AttributeDefinitions:
           - AttributeName: meetupId
             AttributeType: S
-          - AttributeName: date
+          - AttributeName: searchString  
             AttributeType: S
         KeySchema:
           - AttributeName: meetupId
             KeyType: HASH
         GlobalSecondaryIndexes:
-          - IndexName: DateIndex
+          - IndexName: SearchIndex
             KeySchema:
-              - AttributeName: date
-                KeyType: HASH
+              - AttributeName: searchString
+                KeyType: HASH  
             Projection:
               ProjectionType: ALL
         BillingMode: PAY_PER_REQUEST
@@ -101,12 +101,14 @@ resources:
       Properties:                       
         TableName: ${self:provider.environment.RATINGS_TABLE}
         AttributeDefinitions:
+          - AttributeName: ratingId  
+            AttributeType: S
           - AttributeName: userId
             AttributeType: S
           - AttributeName: meetupId
             AttributeType: S
-          - AttributeName: ratingId  
-            AttributeType: S
+          - AttributeName: stars
+            AttributeType: N 
         KeySchema:
           - AttributeName: ratingId 
             KeyType: HASH
@@ -116,8 +118,13 @@ resources:
               - AttributeName: userId
                 KeyType: HASH
               - AttributeName: meetupId
-                KeyType: RANGE  
+                KeyType: RANGE
             Projection:
               ProjectionType: ALL
-        BillingMode: PAY_PER_REQUEST
+          - IndexName: StarsIndex
+            KeySchema:
+              - AttributeName: stars
+                KeyType: HASH 
+            Projection:
+              ProjectionType: ALL
 
