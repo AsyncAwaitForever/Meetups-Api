@@ -60,7 +60,7 @@ build:
             path: /meetups
             method: get
     displayMeetup:
-      handler: handlers/Meetups/displayMeetup/index.handler
+      handler: handlers/Meetups/DisplayMeetup/index.handler
       events:
         - httpApi:
             path: /meetups/{meetupId}
