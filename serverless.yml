@@ -86,9 +86,12 @@ resources:
             AttributeType: S
           - AttributeName: title
             AttributeType: S
-          - AttributeName: category
-            AttributeType: S
           - AttributeName: location
+            AttributeType: S
+          - AttributeName: time
+            AttributeType: S
+          # category must be included, it's in user story
+          - AttributeName: category
             AttributeType: S
         KeySchema:
           - AttributeName: meetupId
@@ -100,15 +103,21 @@ resources:
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-          - IndexName: CategoryIndex
-            KeySchema:
-              - AttributeName: category
-                KeyType: HASH
-            Projection:
-              ProjectionType: ALL
           - IndexName: LocationIndex
             KeySchema:
               - AttributeName: location
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+          - IndexName: TimeIndex
+            KeySchema:
+              - AttributeName: time
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+          - IndexName: CategoryIndex
+            KeySchema:
+              - AttributeName: category
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
