@@ -12,10 +12,6 @@ export const handler = async () => {
     return sendSuccessResponse(200, { message: "meetups loaded successfully" });
   } catch (error) {
     console.error("Error in loadMeetups handler:", error);
-    return apiResponse(500, {
-      success: false,
-      message: "Internal server error.",
-      error: error.message,
-    });
+    return sendError(500, {message: "Internal server error"});
   }
 };
