@@ -53,6 +53,18 @@ build:
         - httpApi:
             path: /login
             method: post
+    listMeetups:
+      handler: handlers/Meetups/ListMeetups/index.handler
+      events:
+        - httpApi:
+            path: /meetups
+            method: get
+    displayMeetup:
+      handler: handlers/Meetups/DisplayMeetup/index.handler
+      events:
+        - httpApi:
+            path: /meetups/{meetupId}
+            method: get
 
 resources:
   Resources:
@@ -86,9 +98,12 @@ resources:
             AttributeType: S
           - AttributeName: title
             AttributeType: S
-          - AttributeName: category
-            AttributeType: S
           - AttributeName: location
+            AttributeType: S
+          - AttributeName: time
+            AttributeType: S
+          # category must be included, it's in user story
+          - AttributeName: category
             AttributeType: S
         KeySchema:
           - AttributeName: meetupId
@@ -100,15 +115,21 @@ resources:
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-          - IndexName: CategoryIndex
-            KeySchema:
-              - AttributeName: category
-                KeyType: HASH
-            Projection:
-              ProjectionType: ALL
           - IndexName: LocationIndex
             KeySchema:
               - AttributeName: location
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+          - IndexName: TimeIndex
+            KeySchema:
+              - AttributeName: time
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+          - IndexName: CategoryIndex
+            KeySchema:
+              - AttributeName: category
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
@@ -145,3 +166,4 @@ resources:
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
+        BillingMode: PAY_PER_REQUEST

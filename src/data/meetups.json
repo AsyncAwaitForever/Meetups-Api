@@ -1,0 +1,37 @@
+[
+    {
+      "title": "Yoga in the Park",
+      "category": "sport",
+      "location": "Central Park",
+      "time": "2024-11-01T10:00:00Z", 
+      "host": "Jane Doe"
+    },
+    {
+      "title": "Tech Talks: AI Innovations",
+      "category": "Tech",
+      "location": "Downtown Conference Center",
+      "time": "2024-11-02T14:00:00Z", 
+      "host": "John Smith"
+    },
+    {
+      "title": "Cooking Class: Italian Cuisine",
+      "category": "Food",
+      "location": "Downtown Conference Center",
+      "time": "2024-11-03T18:00:00Z", 
+      "host": "Chef Mario"
+    },
+    {
+      "title": "Photography Walk",
+      "category": "Art",
+      "location": "City Art Gallery",
+      "time": "2024-11-04T09:30:00Z", 
+      "host": "Emily Brown"
+    },
+    {
+      "title": "Book Club: Fantasy Novels",
+      "category": "Books",
+      "location": "Local Library",
+      "time": "2024-11-05T16:00:00Z", 
+      "host": "Sarah Johnson"
+    }
+  ]
