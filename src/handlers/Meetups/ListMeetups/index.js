@@ -7,12 +7,12 @@ export const handler = async () => {
     const meetups = await listMeetups();
 
     if (!meetups || meetups.length === 0) {
-      return sendError(404, { message: "meetups failed to load" });
+      return sendError(404, "meetups failed to load" );
     }
 
     return sendSuccessResponse(200, { meetups });
   } catch (error) {
     console.error("Error in listMeetups handler:", error);
-    return sendError(500, {message: "Internal server error"});
+    return sendError(500, "Internal server error");
   }
 };

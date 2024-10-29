@@ -51,3 +51,18 @@ export const listMeetups = async () => {
     throw new Error("Failed to list meetups");
   }
 };
+export const displayMeetup = async (meetupId) => {
+  try {
+    const params = {
+      TableName: meetupsTable,
+      Key: {
+        meetupId: meetupId
+      }
+    };
+    const result = await dynamoDbUtils.getItem(params);
+    return result.Item;
+  } catch (error) {
+    throw new Error("Failed to display this meetup");
+  }
+};
+

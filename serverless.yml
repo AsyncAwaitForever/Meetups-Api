@@ -57,7 +57,13 @@ build:
       handler: handlers/Meetups/ListMeetups/index.handler
       events:
         - httpApi:
-            path: /meetups #temporary url
+            path: /meetups
+            method: get
+    displayMeetup:
+      handler: handlers/Meetups/displayMeetup/index.handler
+      events:
+        - httpApi:
+            path: /meetups/{meetupId}
             method: get
 
 resources:
