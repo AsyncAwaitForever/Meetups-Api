@@ -37,4 +37,5 @@ jobs:
           # deploy 
           npm run deploy:dev
           # invoke specific function to load data
+          sls info --verbose --stage dev
           npm run invoke:dev-data
