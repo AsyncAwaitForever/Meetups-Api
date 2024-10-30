@@ -6,7 +6,7 @@ import { signupSchema } from "../../../utils/validationUtils";
 
 const signupHandler = async (event) => {
   try {
-    const { email, password, username } = JSON.parse(event.body);
+    const { email, password, username } = event.body;
 
     const user = await signupUser(email, password, username);
 
