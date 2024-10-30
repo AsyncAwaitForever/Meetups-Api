@@ -29,9 +29,11 @@ provider:
             - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_TABLE}
             - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.MEETUPS_TABLE}
             - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.RATINGS_TABLE}
+            - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.REGISTRATIONS_TABLE}
             - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_TABLE}/index/*
             - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.MEETUPS_TABLE}/index/*
             - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.RATINGS_TABLE}/index/*
+            - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.REGISTRATIONS_TABLE}/index/*
 
 package:
   individually: true
@@ -43,7 +45,7 @@ build:
 
   functions:
     LoadInData:
-    handler: src/handlers/Meetups/LoadData/index.handler
+      handler: src/handlers/Meetups/LoadData/index.handler
 
     signup:
       handler: src/handlers/Users/Signup/index.handler
