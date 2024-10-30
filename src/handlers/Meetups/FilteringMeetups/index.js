@@ -3,7 +3,6 @@ import { queryMeetupsWithOptions } from "../../../services/meetupService";
 import { sendResponse } from "../../../utils/apiResponses";
 import { validationMiddleware } from "../../../middleware/validation";
 import { querySchema } from "../../../utils/validationUtils";
-import validateToken from "../../../middleware/auth";
 
 const queryHandler = async (event) => {
   try {
@@ -19,6 +18,7 @@ const queryHandler = async (event) => {
   }
 };
 
-export const handler = middy(queryHandler)
-  .use(validationMiddleware(querySchema))
-  .use(validateToken);
+export const handler = middy(queryHandler).use(
+  validationMiddleware(querySchema)
+);
+// .use(validateToken);   // we can use auth on this function

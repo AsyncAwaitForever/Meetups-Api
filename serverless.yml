@@ -88,6 +88,12 @@ functions:
       - httpApi:
           path: /meetups/search
           method: get
+  filterMeetups:
+    handler: src/handlers/Meetups/FilteringMeetups/index.handler
+    events:
+      - httpApi:
+          path: /meetups/filter
+          method: get
   registerToMeetup:
     handler: src/handlers/Users/RegisterMeetups/index.handler
     events:

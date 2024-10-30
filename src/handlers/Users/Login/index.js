@@ -12,7 +12,7 @@ const loginHandler = async (event) => {
 
     return sendSuccessResponse(200, {
       token: data.token,
-      userId: data.user,
+      userId: data.user.userId,
     });
   } catch (error) {
     if (
