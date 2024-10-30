@@ -25,6 +25,7 @@ export const loadMeetups = async () => {
           location: meetup.location,
           time: meetup.time,
           host: meetup.host,
+          description: meetup.description,
         },
       };
       await dynamoDbUtils.putItem(params);
@@ -51,13 +52,14 @@ export const listMeetups = async () => {
     throw new Error("Failed to list meetups");
   }
 };
+
 export const displayMeetup = async (meetupId) => {
   try {
     const params = {
       TableName: meetupsTable,
       Key: {
-        meetupId: meetupId
-      }
+        meetupId: meetupId,
+      },
     };
     const result = await dynamoDbUtils.getItem(params);
     return result.Item;
@@ -66,3 +68,24 @@ export const displayMeetup = async (meetupId) => {
   }
 };
 
+export const searchMeetups = async (keyword) => {
+  try {
+    const params = {
+      TableName: meetupsTable,
+      FilterExpression:
+        "contains(#title, :keyword) OR contains(#description, :keyword)",
+      ExpressionAttributeNames: {
+        "#title": "title",
+        "#description": "description",
+      },
+      ExpressionAttributeValues: {
+        ":keyword": keyword.toLowerCase(),
+      },
+    };
+
+    const result = await dynamoDbUtils.scanItems(params);
+    return result.Items || [];
+  } catch (error) {
+    throw new Error("Database error - failed to search meetups");
+  }
+};

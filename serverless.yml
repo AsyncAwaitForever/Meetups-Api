@@ -53,6 +53,7 @@ build:
         - httpApi:
             path: /login
             method: post
+
     listMeetups:
       handler: handlers/Meetups/ListMeetups/index.handler
       events:
@@ -64,6 +65,12 @@ build:
       events:
         - httpApi:
             path: /meetups/{meetupId}
+            method: get
+    searchMeetups:
+      handler: handlers/Meetups/SearchMeetups/index.handler
+      events:
+        - httpApi:
+            path: /meetups/search
             method: get
 
 resources:
