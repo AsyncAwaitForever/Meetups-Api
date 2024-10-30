@@ -34,6 +34,7 @@ export const loadMeetups = async () => {
       await dynamoDbUtils.putItem(params);
     }
     console.log("Meetups loaded successfully.");
+    return { success: true, message: "Meetups loaded successfully" };
   } catch (error) {
     throw new Error("Database error - failed to load meetups");
   }
