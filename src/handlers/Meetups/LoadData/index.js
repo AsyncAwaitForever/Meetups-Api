@@ -6,10 +6,10 @@ export const handler = async () => {
     const result = await loadMeetups();
 
     if (!result.success) {
-      return sendError(400, "meetups already loaded");
+      return sendError(400, result.message);
     }
 
-    return sendSuccessResponse(200, { message: "meetups loaded successfully" });
+    return sendSuccessResponse(200, { message: result.message });
   } catch (error) {
     console.error("Error in loadMeetups handler:", error);
     if (error.message.includes("Database error")) {
