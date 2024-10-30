@@ -74,11 +74,17 @@ build:
             path: /meetups/search
             method: get
     registerToMeetup:
-      handler: handlers/User/RegisterMeetups/index.handler
+      handler: handlers/Users/RegisterMeetups/index.handler
       events:
         - httpApi:
             path: /meetups/{meetupId}/register
             method: post
+    unregisterMeetup:
+      handler: handlers/Users/UnregisterMeetups/index.handler
+      events:
+        - httpApi:
+            path: /meetups/{meetupId}/unregister
+            method: delete
  
 
 resources:
