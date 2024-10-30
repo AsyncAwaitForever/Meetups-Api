@@ -22,12 +22,13 @@ export const loadMeetups = async () => {
         Item: {
           meetupId: uuidV4(),
           title: meetup.title,
+          category: meetup.category,
           location: meetup.location,
           time: meetup.time,
           host: meetup.host,
           description: meetup.description,
           availableCapacity: meetup.availableCapacity,
-          maxCapacity: meetup.maxCapacity
+          maxCapacity: meetup.maxCapacity,
         },
       };
       await dynamoDbUtils.putItem(params);
