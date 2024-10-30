@@ -4,6 +4,8 @@
   "description": "",
   "main": "handler.js",
   "scripts": {
+    "deploy:dev": "serverless deploy --stage dev --verbose",
+    "invoke:dev-data": "sls invoke -f LoadInData --stage dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
