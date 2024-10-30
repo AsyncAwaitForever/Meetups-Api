@@ -43,53 +43,53 @@ build:
     bundle: true
     minify: true
 
-  functions:
-    LoadInData:
-      handler: src/handlers/Meetups/LoadData/index.handler
+functions:
+  LoadInData:
+    handler: src/handlers/Meetups/LoadData/index.handler
 
-    signup:
-      handler: src/handlers/Users/Signup/index.handler
-      events:
-        - httpApi:
-            path: /signup
-            method: post
-    login:
-      handler: src/handlers/Users/Login/index.handler
-      events:
-        - httpApi:
-            path: /login
-            method: post
+  signup:
+    handler: src/handlers/Users/Signup/index.handler
+    events:
+      - httpApi:
+          path: /signup
+          method: post
+  login:
+    handler: src/handlers/Users/Login/index.handler
+    events:
+      - httpApi:
+          path: /login
+          method: post
 
-    listMeetups:
-      handler: src/handlers/Meetups/ListMeetups/index.handler
-      events:
-        - httpApi:
-            path: /meetups
-            method: get
-    displayMeetup:
-      handler: src/handlers/Meetups/DisplayMeetup/index.handler
-      events:
-        - httpApi:
-            path: /meetups/{meetupId}
-            method: get
-    searchMeetups:
-      handler: src/handlers/Meetups/SearchMeetups/index.handler
-      events:
-        - httpApi:
-            path: /meetups/search
-            method: get
-    registerToMeetup:
-      handler: src/handlers/Users/RegisterMeetups/index.handler
-      events:
-        - httpApi:
-            path: /meetups/{meetupId}/register
-            method: post
-    unregisterMeetup:
-      handler: src/handlers/Users/UnregisterMeetups/index.handler
-      events:
-        - httpApi:
-            path: /meetups/{meetupId}/unregister
-            method: delete
+  listMeetups:
+    handler: src/handlers/Meetups/ListMeetups/index.handler
+    events:
+      - httpApi:
+          path: /meetups
+          method: get
+  displayMeetup:
+    handler: src/handlers/Meetups/DisplayMeetup/index.handler
+    events:
+      - httpApi:
+          path: /meetups/{meetupId}
+          method: get
+  searchMeetups:
+    handler: src/handlers/Meetups/SearchMeetups/index.handler
+    events:
+      - httpApi:
+          path: /meetups/search
+          method: get
+  registerToMeetup:
+    handler: src/handlers/Users/RegisterMeetups/index.handler
+    events:
+      - httpApi:
+          path: /meetups/{meetupId}/register
+          method: post
+  unregisterMeetup:
+    handler: src/handlers/Users/UnregisterMeetups/index.handler
+    events:
+      - httpApi:
+          path: /meetups/{meetupId}/unregister
+          method: delete
 
 resources:
   Resources:
