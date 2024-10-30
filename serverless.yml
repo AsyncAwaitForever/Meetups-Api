@@ -163,7 +163,7 @@ resources:
     RegistrationsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: MeetupRegistrations
+        TableName: ${self:provider.environment.REGISTRATIONS_TABLE}
         AttributeDefinitions:
           - AttributeName: meetupId
             AttributeType: S
