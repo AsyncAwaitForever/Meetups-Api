@@ -13,6 +13,9 @@ export const handler = async () => {
     return sendSuccessResponse(200, { meetups });
   } catch (error) {
     console.error("Error in listMeetups handler:", error);
+    if (error.message.includes("Database error")) {
+      return sendError(500, "Database error, failed to list meetups");
+    }
     return sendError(500, "Internal server error");
   }
 };

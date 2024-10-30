@@ -26,18 +26,15 @@ export const loadMeetups = async () => {
           time: meetup.time,
           host: meetup.host,
           description: meetup.description,
+          availableCapacity: meetup.availableCapacity,
+          maxCapacity: meetup.maxCapacity
         },
       };
       await dynamoDbUtils.putItem(params);
     }
     console.log("Meetups loaded successfully.");
-    return { success: true, message: "Meetups loaded successfully" };
   } catch (error) {
-    return {
-      success: false,
-      message: "Failed to load meetups.",
-      error: error.message,
-    };
+    throw new Error("Database error - failed to load meetups");
   }
 };
 
@@ -49,7 +46,7 @@ export const listMeetups = async () => {
     const result = await dynamoDbUtils.scanItems(params);
     return result.Items;
   } catch (error) {
-    throw new Error("Failed to list meetups");
+    throw new Error("Database error - Failed to list meetups");
   }
 };
 
@@ -64,7 +61,7 @@ export const displayMeetup = async (meetupId) => {
     const result = await dynamoDbUtils.getItem(params);
     return result.Item;
   } catch (error) {
-    throw new Error("Failed to display this meetup");
+    throw new Error("Database error - failed to display this meetup");
   }
 };
 
