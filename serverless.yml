@@ -42,50 +42,52 @@ build:
     minify: true
 
   functions:
+    LoadInData:
+    handler: src/handlers/Meetups/LoadData/index.handler
+
     signup:
-      handler: handlers/Users/Signup/index.handler
+      handler: src/handlers/Users/Signup/index.handler
       events:
         - httpApi:
             path: /signup
             method: post
     login:
-      handler: handlers/Users/Login/index.handler
+      handler: src/handlers/Users/Login/index.handler
       events:
         - httpApi:
             path: /login
             method: post
 
     listMeetups:
-      handler: handlers/Meetups/ListMeetups/index.handler
+      handler: src/handlers/Meetups/ListMeetups/index.handler
       events:
         - httpApi:
             path: /meetups
             method: get
     displayMeetup:
-      handler: handlers/Meetups/DisplayMeetup/index.handler
+      handler: src/handlers/Meetups/DisplayMeetup/index.handler
       events:
         - httpApi:
             path: /meetups/{meetupId}
             method: get
     searchMeetups:
-      handler: handlers/Meetups/SearchMeetups/index.handler
+      handler: src/handlers/Meetups/SearchMeetups/index.handler
       events:
         - httpApi:
             path: /meetups/search
             method: get
     registerToMeetup:
-      handler: handlers/Users/RegisterMeetups/index.handler
+      handler: src/handlers/Users/RegisterMeetups/index.handler
       events:
         - httpApi:
             path: /meetups/{meetupId}/register
             method: post
     unregisterMeetup:
-      handler: handlers/Users/UnregisterMeetups/index.handler
+      handler: src/handlers/Users/UnregisterMeetups/index.handler
       events:
         - httpApi:
             path: /meetups/{meetupId}/unregister
             method: delete
- 
 
 resources:
   Resources:
@@ -167,19 +169,18 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: meetupId
-            KeyType: HASH  
+            KeyType: HASH
           - AttributeName: userId
-            KeyType: RANGE  
+            KeyType: RANGE
         GlobalSecondaryIndexes:
           - IndexName: userRegistrations
             KeySchema:
               - AttributeName: userId
-                KeyType: HASH 
+                KeyType: HASH
             Projection:
               ProjectionType: ALL
-        BillingMode: PAY_PER_REQUEST  
+        BillingMode: PAY_PER_REQUEST
 
-    
     RatingsTable:
       Type: AWS::DynamoDB::Table
       Properties:
