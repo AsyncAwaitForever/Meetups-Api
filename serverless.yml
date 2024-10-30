@@ -13,7 +13,7 @@ provider:
     USERS_TABLE: ${self:service}-users-${self:provider.stage}
     MEETUPS_TABLE: ${self:service}-meetups-${self:provider.stage}
     RATINGS_TABLE: ${self:service}-ratings-${self:provider.stage}
-    REGISTRATIONS_TABLE: ${self:service}-ratings-${self:provider.stage}
+    REGISTRATIONS_TABLE: ${self:service}-registrations-${self:provider.stage}
   iam:
     role:
       statements:
