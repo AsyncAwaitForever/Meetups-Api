@@ -77,5 +77,6 @@ export const loginUser = async (email, password) => {
   }
 
   const token = generateToken(user.userId);
-  return { user, token };
+  const { password: _, ...userWithoutPassword } = user;
+  return { user: userWithoutPassword, token };
 };
