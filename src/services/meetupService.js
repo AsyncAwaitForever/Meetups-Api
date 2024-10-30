@@ -152,33 +152,37 @@ export const queryMeetupsByCategory = async (category) => {
 };
 
 export const queryMeetupsWithOptions = async (options) => {
-  const { date, category, location } = options;
-  let results = [];
+  try {
+    const { date, category, location } = options;
+    let results = [];
 
-  if (date && category && location) {
-    results = await queryMeetupsByDate(date);
-    results = results.filter(
-      (meetup) => meetup.category === category && meetup.location === location
-    );
+    if (date && category && location) {
+      results = await queryMeetupsByDate(date);
+      results = results.filter(
+        (meetup) => meetup.category === category && meetup.location === location
+      );
+      return results;
+    }
+
+    if (date && category) {
+      results = await queryMeetupsByDate(date);
+      results = results.filter((meetup) => meetup.category === category);
+    } else if (date && location) {
+      results = await queryMeetupsByDate(date);
+      results = results.filter((meetup) => meetup.location === location);
+    } else if (category && location) {
+      results = await queryMeetupsByCategory(category);
+      results = results.filter((meetup) => meetup.location === location);
+    } else if (date) {
+      results = await this.queryMeetupsByDate(date);
+    } else if (category) {
+      results = await this.queryMeetupsByCategory(category);
+    } else if (location) {
+      results = await this.queryMeetupsByLocation(location);
+    }
+
     return results;
+  } catch (error) {
+    throw new Error("Database error - failed to query meetups");
   }
-
-  if (date && category) {
-    results = await queryMeetupsByDate(date);
-    results = results.filter((meetup) => meetup.category === category);
-  } else if (date && location) {
-    results = await queryMeetupsByDate(date);
-    results = results.filter((meetup) => meetup.location === location);
-  } else if (category && location) {
-    results = await queryMeetupsByCategory(category);
-    results = results.filter((meetup) => meetup.location === location);
-  } else if (date) {
-    results = await this.queryMeetupsByDate(date);
-  } else if (category) {
-    results = await this.queryMeetupsByCategory(category);
-  } else if (location) {
-    results = await this.queryMeetupsByLocation(location);
-  }
-
-  return results;
 };

@@ -11,6 +11,14 @@ export const loginSchema = vine.object({
   password: vine.string(),
 });
 
+export const querySchema = vine.object({
+  queryStringParameters: vine.object({
+    date: vine.date().optional(),
+    category: vine.string().optional().minLength(2),
+    location: vine.string().optional().minLength(2),
+  }),
+});
+
 export const validate = async (schema, data) => {
   try {
     const validator = vine.compile(schema);
