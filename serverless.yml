@@ -108,7 +108,7 @@ resources:
             AttributeType: S
           - AttributeName: location
             AttributeType: S
-          - AttributeName: time
+          - AttributeName: date
             AttributeType: S
           # category must be included, it's in user story
           - AttributeName: category
@@ -117,25 +117,25 @@ resources:
           - AttributeName: meetupId
             KeyType: HASH
         GlobalSecondaryIndexes:
-          - IndexName: TitleIndex
+          - IndexName: titleIndex
             KeySchema:
               - AttributeName: title
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-          - IndexName: LocationIndex
+          - IndexName: locationIndex
             KeySchema:
               - AttributeName: location
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-          - IndexName: TimeIndex
+          - IndexName: dateIndex
             KeySchema:
-              - AttributeName: time
+              - AttributeName: date
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-          - IndexName: CategoryIndex
+          - IndexName: categoryIndex
             KeySchema:
               - AttributeName: category
                 KeyType: HASH
@@ -154,18 +154,17 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: meetupId
-            KeyType: HASH  
+            KeyType: HASH
           - AttributeName: userId
-            KeyType: RANGE  
+            KeyType: RANGE
         GlobalSecondaryIndexes:
           - IndexName: userRegistrations
             KeySchema:
               - AttributeName: userId
-                KeyType: HASH 
+                KeyType: HASH
             Projection:
               ProjectionType: ALL
-        BillingMode: PAY_PER_REQUEST  
-    
+        BillingMode: PAY_PER_REQUEST
 
     RatingsTable:
       Type: AWS::DynamoDB::Table
