@@ -34,4 +34,7 @@ jobs:
           SERVERLESS_ORG: ${{ secrets.SERVERLESS_ORG }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: |
-          serverless remove
+          # deploy 
+          npm run deploy:dev
+          # invoke specific function to load data
+          npm run invoke:dev-data
