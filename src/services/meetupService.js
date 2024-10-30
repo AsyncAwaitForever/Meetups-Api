@@ -21,12 +21,12 @@ export const loadMeetups = async () => {
         TableName: meetupsTable,
         Item: {
           meetupId: uuidV4(),
-          title: meetup.title,
+          title: meetup.title.toLowerCase(),
           category: meetup.category,
           location: meetup.location,
           time: meetup.time,
           host: meetup.host,
-          description: meetup.description,
+          description: meetup.description.toLowerCase(),
           availableCapacity: meetup.availableCapacity,
           maxCapacity: meetup.maxCapacity,
         },
@@ -34,6 +34,7 @@ export const loadMeetups = async () => {
       await dynamoDbUtils.putItem(params);
     }
     console.log("Meetups loaded successfully.");
+    return { success: true, message: "Meetups loaded successfully" };
   } catch (error) {
     throw new Error("Database error - failed to load meetups");
   }
