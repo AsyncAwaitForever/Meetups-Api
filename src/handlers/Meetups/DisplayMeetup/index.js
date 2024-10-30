@@ -16,6 +16,9 @@ export const handler = async (event) => {
     return sendSuccessResponse(200, { meetup });
   } catch (error) {
     console.error("Error in display meetup handler:", error);
-    return sendError(500, "Internal server error");
+    if (error.message.includes("Database error")) {
+      return sendError(500, "Database error, failed to display meetup");
+    }
+    return sendError(500, "Database error - internal server error");
   }
 };
