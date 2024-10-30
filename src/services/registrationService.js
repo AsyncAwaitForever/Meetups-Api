@@ -94,7 +94,18 @@ export const removeRegistration = async (meetupId, userId) => {
             throw new Error("User is not registered for this meetup");
         }
 
-        await dynamoDbUtils.deleteItem(registrationParams);
+        const deleteParams = {
+            TableName: registrationsTable,
+            Key: {
+                meetupId: meetupId,
+                userId: userId,
+            },
+            ReturnValues: "ALL_OLD",
+        };
+
+
+        const deletedData = await dynamoDbUtils.deleteItem(registrationParams);
+
 
         const updatedCapacity = meetup.availableCapacity + 1;
 
@@ -108,8 +119,11 @@ export const removeRegistration = async (meetupId, userId) => {
                 ":capacity": updatedCapacity,
             },
         };
+        
 
         await dynamoDbUtils.updateItem(updateParams)
+
+        return deletedData.Attributes
 
     } catch (error) {
       throw new Error("Database error - Failed to remove registration");

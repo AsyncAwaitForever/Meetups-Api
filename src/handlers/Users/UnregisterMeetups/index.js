@@ -14,9 +14,9 @@ const unregisterHandler = async (event) => {
         return sendError(400, "meetupId and userId are required");
     }
 
-    await removeRegistration(meetupId, userId);
+    const data = await removeRegistration(meetupId, userId);
 
-    return sendSuccessResponse(200, { message: "User unregistered to meetup" });
+    return sendSuccessResponse(200, { message: data });
   } catch (error) {
     console.error("Error in registration handler:", error);
     if (error.message.includes("Database error")) {
