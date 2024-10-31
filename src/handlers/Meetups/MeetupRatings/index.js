@@ -1,5 +1,6 @@
 import { displayMeetupRatings } from "../../../services/reviewService";
 import { sendSuccessResponse, sendError } from "../../../utils/apiResponses";
+import middy from "@middy/core";
 
 
 const displayRatingsHandler = async (event) => {
@@ -12,7 +13,7 @@ const displayRatingsHandler = async (event) => {
   
       console.log("Attempting to get ratings for meetupId:", meetupId); 
       const result = await displayMeetupRatings(meetupId);
-      return sendResponse(200, result);
+      return sendSuccessResponse(200, result);
     } catch (error) {
       console.error("Full error details:", {
         message: error.message,
