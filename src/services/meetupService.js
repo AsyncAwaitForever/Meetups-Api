@@ -125,7 +125,22 @@ export const searchMeetups = async (keyword) => {
 
 export const queryMeetupsByDate = async (date) => {
   try {
+    const startOfDay = `${date}T00:00:00Z`;
+    const endOfDay = `${date}T23:59:59Z`;
+
     const params = {
+      TableName: meetupsTable,
+      IndexName: "dateIndex",
+      KeyConditionExpression: "#time BETWEEN :startDate AND :endDate",
+      ExpressionAttributeNames: {
+        "#time": "time",
+      },
+      ExpressionAttributeValues: {
+        ":startDate": startOfDay,
+        ":endDate": endOfDay,
+      },
+    };
+    /*     const params = {
       TableName: meetupsTable,
       IndexName: "dateIndex",
       KeyConditionExpression: "begins_with(#time, :date)",
@@ -135,7 +150,7 @@ export const queryMeetupsByDate = async (date) => {
       ExpressionAttributeValues: {
         ":date": date,
       },
-    };
+    }; */
     const data = await dynamoDbUtils.queryItems(params);
     return data.Items;
   } catch (error) {
