@@ -17,6 +17,10 @@ export const addRegistration = async (meetupId, userId) => {
     if (!meetup) {
       throw new Error("Meetup not found");
     }
+    const currentTime = new Date().toISOString();
+    if (meetup.time < currentTime) {
+      throw new Error("Cannot register for past meetups");
+    }
     if (meetup.availableCapacity <= 0) {
       throw new Error("This meetup is already fully booked");
     }
@@ -58,6 +62,7 @@ export const addRegistration = async (meetupId, userId) => {
         meetupId: meetupId,
         userId: userId,
         status: "upcoming", //  store status like 'upcoming', 'past'
+        //   we must check this, maybe better to have it on self meetup !and pick it up to response from meetup here if needed
       },
     };
     await dynamoDbUtils.putItem(params);
@@ -79,6 +84,10 @@ export const removeRegistration = async (meetupId, userId) => {
 
     if (!meetup) {
       throw new Error("Meetup not found");
+    }
+
+    if (meetup.time < new Date().toISOString()) {
+      throw new Error("Cannot unregister from past meetups");
     }
 
     const registrationParams = {

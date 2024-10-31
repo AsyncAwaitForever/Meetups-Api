@@ -16,6 +16,8 @@ export const loadMeetups = async () => {
       return { success: false, message: "Meetups already exist" };
     }
 
+    // const currentTime = new Date().toISOString();   //  we can fix this later tu push status also
+
     for (const meetup of meetupsData) {
       const params = {
         TableName: meetupsTable,
@@ -29,6 +31,7 @@ export const loadMeetups = async () => {
           description: meetup.description.toLowerCase(),
           availableCapacity: meetup.availableCapacity,
           maxCapacity: meetup.maxCapacity,
+          // status: meetup.time < currentTime ? "past" : "upcoming",   // status for meetups objects
         },
       };
       await dynamoDbUtils.putItem(params);
@@ -46,6 +49,37 @@ export const listMeetups = async () => {
       TableName: meetupsTable,
     };
     const result = await dynamoDbUtils.scanItems(params);
+
+    // -->>>>>>  with this we could be able change/update status each time we list meetups ! <<<<<<<<-------
+
+    /*     const currentTime = new Date().toISOString();
+
+    const updatePromises = result.Items.map(async (meetup) => {
+      const newStatus = meetup.time < currentTime ? "past" : "upcoming";
+
+      if (meetup.status !== newStatus) {
+        const updateParams = {
+          TableName: meetupsTable,
+          Key: {
+            meetupId: meetup.meetupId,
+          },
+          UpdateExpression: "SET #status = :status",
+          ExpressionAttributeNames: {
+            "#status": "status",
+          },
+          ExpressionAttributeValues: {
+            ":status": newStatus,
+          },
+        };
+        await dynamoDbUtils.updateItem(updateParams);
+        meetup.status = newStatus;
+      }
+
+      return meetup;
+    });
+        const updatedMeetups = await Promise.all(updatePromises);
+        return updatedMeetups; */
+
     return result.Items;
   } catch (error) {
     throw new Error("Database error - Failed to list meetups");
@@ -94,9 +128,9 @@ export const queryMeetupsByDate = async (date) => {
     const params = {
       TableName: meetupsTable,
       IndexName: "dateIndex",
-      KeyConditionExpression: "#date = :date",
+      KeyConditionExpression: "begins_with(#time, :date)",
       ExpressionAttributeNames: {
-        "#date": "date",
+        "#time": "time",
       },
       ExpressionAttributeValues: {
         ":date": date,
