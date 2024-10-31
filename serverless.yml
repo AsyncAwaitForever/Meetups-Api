@@ -14,16 +14,16 @@ provider:
     MEETUPS_TABLE: ${self:service}-meetups-${self:provider.stage}
     RATINGS_TABLE: ${self:service}-ratings-${self:provider.stage}
     REGISTRATIONS_TABLE: ${self:service}-registrations-${self:provider.stage}
-  httpApi:
-    cors:
-      allowedHeaders:
-        - Content-Type
-        - authorization
-      allowedMethods:
-        - GET
-        - POST
-        - PUT
-        - DELETE
+  # httpApi:
+  #   cors:
+  #     allowedHeaders:
+  #       - Content-Type
+  #       - authorization
+  #     allowedMethods:
+  #       - GET
+  #       - POST
+  #       - PUT
+  #       - DELETE
   iam:
     role:
       statements:
