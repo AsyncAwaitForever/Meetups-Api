@@ -118,7 +118,7 @@ export const displayRatings = async () => {
           return []; 
         }
         
-        return items;
+        return result.Items;
       } catch (error) {
         console.error("Error in displayMeetupRatings:", error);
         console.error("Error stack:", error.stack);
