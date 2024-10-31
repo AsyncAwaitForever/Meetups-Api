@@ -4,8 +4,8 @@ import { sendSuccessResponse, sendError } from "../../../utils/apiResponses";
 
 export const handler = async (event) => {
     try {
-        const meetupId = JSON.parse(event.body)
-      const ratings = await displayMeetupRatings();
+        const meetupId = event.pathParameters.meetupId
+        const ratings = await displayMeetupRatings(meetupId);
 
       return sendSuccessResponse(200, ratings);
     } catch (error) {

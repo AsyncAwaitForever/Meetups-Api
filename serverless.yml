@@ -120,6 +120,12 @@ functions:
       - httpApi:
           path: /meetups/ratings
           method: get
+  meetupRatings:
+    handler: src/handlers/Meetups/MeetupRatings/index.handler
+    events:
+      - httpApi:
+          path: /meetups/{meetupId}/ratings
+          method: get
 
 resources:
   Resources:
