@@ -19,6 +19,6 @@ const queryHandler = async (event) => {
 };
 
 export const handler = middy(queryHandler).use(
-  validationMiddleware(querySchema)
+  validationMiddleware(querySchema, "query")
 );
 // .use(validateToken);   // we can use auth on this function
