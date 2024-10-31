@@ -1,4 +1,4 @@
-import vine from "@vinejs/vine";
+import vine, { errors } from "@vinejs/vine";
 
 export const signupSchema = vine.object({
   email: vine.string().email(),
@@ -14,8 +14,8 @@ export const loginSchema = vine.object({
 export const querySchema = vine.object({
   queryStringParameters: vine.object({
     date: vine.date().optional(),
-    category: vine.string().optional().minLength(2),
-    location: vine.string().optional().minLength(2),
+    category: vine.string().minLength(2).optional(),
+    location: vine.string().minLength(2).optional(),
   }),
 });
 
