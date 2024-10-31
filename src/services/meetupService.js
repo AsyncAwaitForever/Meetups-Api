@@ -94,9 +94,9 @@ export const queryMeetupsByDate = async (date) => {
     const params = {
       TableName: meetupsTable,
       IndexName: "dateIndex",
-      KeyConditionExpression: "#date = :date",
+      KeyConditionExpression: "begins_with(#time, :date)",
       ExpressionAttributeNames: {
-        "#date": "date",
+        "#time": "time",
       },
       ExpressionAttributeValues: {
         ":date": date,

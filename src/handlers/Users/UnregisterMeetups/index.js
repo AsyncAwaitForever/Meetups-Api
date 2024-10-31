@@ -21,19 +21,17 @@ const unregisterHandler = async (event) => {
       message: `Successfully unregistered from meetup id:${data.meetupId}`,
     });
   } catch (error) {
-    if (error.message === "Meetup not found") {
-      return sendError(404, "Meetup not found");
-    }
-    if (error.message.includes("not registered for this meetup")) {
-      return sendError(400, "User is not registered for this meetup");
-    }
-    if (error.message.includes("Database error")) {
-      return sendError(
-        500,
-        "Database error, failed to unregister for the meetup"
-      );
-    }
-    return sendError(500, "Internal server error");
+    const errorMap = {
+      "Database error - Failed to remove registration": 500,
+      "Cannot unregister from past meetups": 400,
+      "Meetup not found": 404,
+      "User is not registered for this meetup": 404,
+    };
+
+    const statusCode = errorMap[error.message] || 500;
+    const message = error.message || "Internal server error";
+
+    return sendError(statusCode, message);
   }
 };
 
