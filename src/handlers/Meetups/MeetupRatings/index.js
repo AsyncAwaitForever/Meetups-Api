@@ -2,24 +2,27 @@ import { displayMeetupRatings } from "../../../services/reviewService";
 import { sendSuccessResponse, sendError } from "../../../utils/apiResponses";
 
 
-export const handler = async (event) => {
+const displayRatingsHandler = async (event) => {
     try {
-        const meetupId = event.pathParameters.meetupId
-        const ratings = await displayMeetupRatings(meetupId);
-
-        if (!meetupId) {
-            return sendError(400, "meetupId is required");
-          }
-
-      return sendSuccessResponse(200, ratings);
+      const { meetupId } = event.pathParameters || {};
+  
+      if (!meetupId) {
+        return sendError(400, "meetupId is required");
+      }
+  
+      console.log("Attempting to get ratings for meetupId:", meetupId); 
+      const result = await displayMeetupRatings(meetupId);
+      return sendResponse(200, result);
     } catch (error) {
-      console.error("Error in meetupratings handler", error);
+      console.error("Full error details:", {
+        message: error.message,
+        stack: error.stack,
+        event: event
+      });
       if (error.message.includes("Database error")) {
-        return sendError(500, "Database error, failed to display ratings");
-      }
-      if (error.message.includes("No ratings found")){
-        return sendError(404, "No ratings found"); 
-      }
+        return sendError(500, error.message);
+      } 
       return sendError(500, "Internal server error");
     }
   };
+  export const handler = middy(displayRatingsHandler);
