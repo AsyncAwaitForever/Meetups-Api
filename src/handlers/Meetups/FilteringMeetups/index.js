@@ -6,9 +6,9 @@ import { querySchema } from "../../../utils/validationUtils";
 
 const queryHandler = async (event) => {
   try {
-    const filteringOptions = event.queryStringParameter || {};
+    const options = event.queryStringParameters || {};
 
-    const queryResult = await queryMeetupsWithOptions(filteringOptions);
+    const queryResult = await queryMeetupsWithOptions(options);
     return sendResponse(200, { meetups: queryResult });
   } catch (error) {
     if (error.message.includes("Database error")) {
