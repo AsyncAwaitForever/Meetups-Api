@@ -99,8 +99,8 @@ export const getUserHistory = async (userId) => {
     const meetupPromises = registrations.Items.map(async (registration) => {
       const meetup = await displayMeetup(registration.meetupId);
       return {
-        ...meetup.meetupId,
-        ...meetup.title,
+        meetupId: meetup.meetupId,
+        title: meetup.title,
         status: registration.status,
       };
     });
