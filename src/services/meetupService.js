@@ -93,7 +93,7 @@ export const queryMeetupsByDate = async (date) => {
   try {
     const params = {
       TableName: meetupsTable,
-      IndexName: DateIndex,
+      IndexName: dateIndex,
       KeyConditionExpression: "#date = :date",
       ExpressionAttributeNames: {
         "#date": "date",
@@ -113,7 +113,7 @@ export const queryMeetupsByLocation = async (location) => {
   try {
     const params = {
       TableName: meetupsTable,
-      IndexName: LocationIndex,
+      IndexName: locationIndex,
       KeyConditionExpression: "#location = :location",
       ExpressionAttributeNames: {
         "#location": "location",
@@ -135,7 +135,7 @@ export const queryMeetupsByCategory = async (category) => {
   try {
     const params = {
       TableName: meetupsTable,
-      IndexName: CategoryIndex,
+      IndexName: categoryIndex,
       KeyConditionExpression: "#category = :category",
       ExpressionAttributeNames: {
         "#category": "category",

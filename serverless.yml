@@ -122,7 +122,7 @@ resources:
           - AttributeName: userId
             KeyType: HASH
         GlobalSecondaryIndexes:
-          - IndexName: EmailIndex
+          - IndexName: emailIndex
             KeySchema:
               - AttributeName: email
                 KeyType: HASH
@@ -150,25 +150,25 @@ resources:
           - AttributeName: meetupId
             KeyType: HASH
         GlobalSecondaryIndexes:
-          - IndexName: TitleIndex
+          - IndexName: titleIndex
             KeySchema:
               - AttributeName: title
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-          - IndexName: LocationIndex
+          - IndexName: locationIndex
             KeySchema:
               - AttributeName: location
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-          - IndexName: DateIndex
+          - IndexName: dateIndex
             KeySchema:
               - AttributeName: date
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-          - IndexName: CategoryIndex
+          - IndexName: categoryIndex
             KeySchema:
               - AttributeName: category
                 KeyType: HASH
@@ -216,7 +216,7 @@ resources:
           - AttributeName: ratingId
             KeyType: HASH
         GlobalSecondaryIndexes:
-          - IndexName: UserMeetupIndex
+          - IndexName: userMeetupIndex
             KeySchema:
               - AttributeName: userId
                 KeyType: HASH
@@ -224,7 +224,7 @@ resources:
                 KeyType: RANGE
             Projection:
               ProjectionType: ALL
-          - IndexName: StarsIndex
+          - IndexName: starsIndex
             KeySchema:
               - AttributeName: stars
                 KeyType: HASH
