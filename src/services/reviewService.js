@@ -110,7 +110,7 @@ export const displayRatings = async () => {
           }
         };
          console.log("Query params:", JSON.stringify(params, null, 2));
-        const result = await dynamoDbUtils.query(params);
+        const result = await dynamoDbUtils.queryItems(params);
       console.log("Query result:", JSON.stringify(result, null, 2));
         const items = result.Items || [];
         
