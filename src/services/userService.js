@@ -9,7 +9,7 @@ export const getUserByEmail = async (email) => {
   try {
     const params = {
       TableName: usersTable,
-      IndexName: "EmailIndex",
+      IndexName: "emailIndex",
       KeyConditionExpression: "email = :email",
       ExpressionAttributeValues: {
         ":email": email,
