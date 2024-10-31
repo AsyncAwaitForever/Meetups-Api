@@ -97,9 +97,11 @@ export const displayRatings = async () => {
 
   export const displayMeetupRatings = async (meetupId) => {
     try {
+  
         const params = {
           TableName: ratingsTable,
-          FilterExpression: "#meetupId = :meetupId",  // Changed to FilterExpression since we're scanning
+          IndexName: "meetupIndex",
+          KeyConditionExpression: "#meetupId = :meetupId",
           ExpressionAttributeNames: {
             "#meetupId": "meetupId"
           },
@@ -107,26 +109,19 @@ export const displayRatings = async () => {
             ":meetupId": meetupId
           }
         };
-        console.log("Query params:", JSON.stringify(params, null, 2)); // Debug log
-        const result = await dynamoDbUtils.scanItems(params);  // Changed to scanItems
-        console.log("Query result:", JSON.stringify(result, null, 2)); // Debug log
+         console.log("Query params:", JSON.stringify(params, null, 2));
+        const result = await dynamoDbUtils.query(params);
+      console.log("Query result:", JSON.stringify(result, null, 2));
+        const items = result.Items || [];
         
-        if (!result.Items || result.Items.length === 0) {
-          return {
-            message: "No reviews found for this meetup",
-            ratings: []
-          };
+        if (items.length === 0) {
+          return []; 
         }
-    
-        return {
-          ratings: result.Items
-        };
+        
+        return items;
       } catch (error) {
-        console.error("Detailed error in displayMeetupRatings:", {
-          error: error.message,
-          stack: error.stack,
-          params: { meetupId }
-        });
-        throw new Error(`Database error - Failed to display ratings: ${error.message}`);
+        console.error("Error in displayMeetupRatings:", error);
+        console.error("Error stack:", error.stack);
+        throw new Error("Database error - Failed to display ratings");
       }
-    };
+    }; 
