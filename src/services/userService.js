@@ -2,8 +2,10 @@ import * as dynamoDbUtils from "../utils/dynamoDbUtils";
 import { v4 as uuidV4 } from "uuid";
 import bcrypt from "bcryptjs";
 import { generateToken } from "../utils/jwtUtils";
+import { displayMeetup } from "./meetupService";
 
 const usersTable = process.env.USERS_TABLE;
+const regTable = process.env.REGISTRATIONS_TABLE;
 
 export const getUserByEmail = async (email) => {
   try {
@@ -79,4 +81,42 @@ export const loginUser = async (email, password) => {
   const token = generateToken(user.userId);
   const { password: _, ...userWithoutPassword } = user;
   return { user: userWithoutPassword, token };
+};
+
+export const getUserHistory = async (userId) => {
+  try {
+    const params = {
+      TableName: regTable,
+      IndexName: "userRegistrations",
+      KeyConditionExpression: "userId = :userId",
+      ExpressionAttributeValues: {
+        ":userId": userId,
+      },
+    };
+
+    const registrations = await dynamoDbUtils.queryItems(params);
+
+    const meetupPromises = registrations.Items.map(async (registration) => {
+      const meetup = await displayMeetup(registration.meetupId);
+      return {
+        ...meetup.meetupId,
+        ...meetup.title,
+        status: registration.status,
+      };
+    });
+
+    const meetups = await Promise.all(meetupPromises);
+
+    /*         const currentDate = new Date().toISOString();
+        const upcomingMeetups = meetups.filter((m) => m.date > currentDate);
+        const pastMeetups = meetups.filter((m) => m.date <= currentDate); */
+
+    return meetups;
+    /*     {   
+      upcoming: upcomingMeetups,
+      past: pastMeetups,
+    }; */
+  } catch (error) {
+    throw new Error("Database error - failed to fetch user");
+  }
 };
