@@ -1,6 +1,6 @@
 import middy from "@middy/core";
 import { queryMeetupsWithOptions } from "../../../services/meetupService";
-import { sendResponse } from "../../../utils/apiResponses";
+import { sendError, sendResponse } from "../../../utils/apiResponses";
 import { validationMiddleware } from "../../../middleware/validation";
 import { querySchema } from "../../../utils/validationUtils";
 
