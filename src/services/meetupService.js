@@ -93,7 +93,7 @@ export const queryMeetupsByDate = async (date) => {
   try {
     const params = {
       TableName: meetupsTable,
-      IndexName: dateIndex,
+      IndexName: "dateIndex",
       KeyConditionExpression: "#date = :date",
       ExpressionAttributeNames: {
         "#date": "date",
@@ -113,7 +113,7 @@ export const queryMeetupsByLocation = async (location) => {
   try {
     const params = {
       TableName: meetupsTable,
-      IndexName: locationIndex,
+      IndexName: "locationIndex",
       KeyConditionExpression: "#location = :location",
       ExpressionAttributeNames: {
         "#location": "location",
@@ -135,7 +135,7 @@ export const queryMeetupsByCategory = async (category) => {
   try {
     const params = {
       TableName: meetupsTable,
-      IndexName: categoryIndex,
+      IndexName: "categoryIndex",
       KeyConditionExpression: "#category = :category",
       ExpressionAttributeNames: {
         "#category": "category",
@@ -158,6 +158,7 @@ export const queryMeetupsWithOptions = async (options) => {
     const { date, category, location } = options;
     let results = [];
 
+    console.log("Options received:", options);
     if (date && category && location) {
       results = await queryMeetupsByDate(date);
       results = results.filter(
@@ -176,15 +177,22 @@ export const queryMeetupsWithOptions = async (options) => {
       results = await queryMeetupsByCategory(category);
       results = results.filter((meetup) => meetup.location === location);
     } else if (date) {
-      results = await this.queryMeetupsByDate(date);
+      results = await queryMeetupsByDate(date);
     } else if (category) {
-      results = await this.queryMeetupsByCategory(category);
+      results = await queryMeetupsByCategory(category);
     } else if (location) {
-      results = await this.queryMeetupsByLocation(location);
+      results = await queryMeetupsByLocation(location);
+    } else {
+      const params = {
+        TableName: meetupsTable,
+      };
+      const data = await dynamoDbUtils.scanItems(params);
+      results = data.Items;
     }
 
     return results;
   } catch (error) {
+    console.error("Query error:", error);
     throw new Error("Database error - failed to query meetups");
   }
 };
