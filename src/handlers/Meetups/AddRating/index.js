@@ -4,13 +4,14 @@ import { sendSuccessResponse, sendError } from "../../../utils/apiResponses";
 import validateToken from "../../../middleware/auth";
 
 
-const ratingHander = async (event) => {
+const ratingHandler = async (event) => {
   try {
-
+    const body = JSON.parse(event.body)
+    const text = body.text
     const meetupId = event.pathParameters.meetupId;
     const userId = event.userId
-    const stars = parseInt(event.body.stars, 10);
-    const text = JSON.parse(event.body.text)
+    const stars = parseInt(body.stars, 10);
+
 
     if (!meetupId || !userId) {
         return sendError(400, "meetupId and userId are required");
@@ -29,4 +30,4 @@ const ratingHander = async (event) => {
   }
 };
 
-export const handler = middy(ratingHander).use(validateToken)
+export const handler = middy(ratingHandler).use(validateToken)
