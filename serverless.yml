@@ -108,6 +108,18 @@ functions:
       - httpApi:
           path: /meetups/{meetupId}/unregister
           method: delete
+  addRating:
+    handler: src/handlers/Meetups/AddRating/index.handler
+    events:
+      - httpApi:
+          path: /meetups/{meetupId}/ratings
+          method: post
+  displayRatings:
+    handler: src/handlers/Meetups/DisplayRatings/index.handler
+    events:
+      - httpApi:
+          path: /meetups/ratings
+          method: get
 
 resources:
   Resources:
@@ -229,6 +241,12 @@ resources:
           - IndexName: starsIndex
             KeySchema:
               - AttributeName: stars
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+          - IndexName: meetupIndex
+            KeySchema:
+              - AttributeName: meetupId
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
