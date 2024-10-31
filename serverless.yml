@@ -71,6 +71,12 @@ functions:
       - httpApi:
           path: /login
           method: post
+  userProfile:
+    handler: src/handlers/Users/UserProfile/index.handler
+    events:
+      - httpApi:
+          path: /profile
+          method: get
 
   listMeetups:
     handler: src/handlers/Meetups/ListMeetups/index.handler
