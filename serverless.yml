@@ -150,25 +150,25 @@ resources:
           - AttributeName: meetupId
             KeyType: HASH
         GlobalSecondaryIndexes:
-          - IndexName: titleIndex
+          - IndexName: TitleIndex
             KeySchema:
               - AttributeName: title
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-          - IndexName: locationIndex
+          - IndexName: LocationIndex
             KeySchema:
               - AttributeName: location
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-          - IndexName: dateIndex
+          - IndexName: DateIndex
             KeySchema:
               - AttributeName: date
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-          - IndexName: categoryIndex
+          - IndexName: CategoryIndex
             KeySchema:
               - AttributeName: category
                 KeyType: HASH
