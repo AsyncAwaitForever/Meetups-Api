@@ -102,6 +102,7 @@ export const getUserHistory = async (userId) => {
         meetupId: meetup.meetupId,
         title: meetup.title,
         status: registration.status,
+        //   we must check this, maybe better to have it on self meetup !and pick it up to response from meetup here if needed
       };
     });
 
