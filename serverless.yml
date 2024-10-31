@@ -16,7 +16,7 @@ provider:
     REGISTRATIONS_TABLE: ${self:service}-registrations-${self:provider.stage}
   httpApi:
     cors:
-      allowOrigins:
+      allowedOrigins:
         - "*"
       allowedHeaders:
         - Content-Type
