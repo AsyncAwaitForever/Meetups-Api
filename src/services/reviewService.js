@@ -98,19 +98,6 @@ export const displayRatings = async () => {
   export const displayMeetupRatings = async (meetupId) => {
     try {
 
-        const ratingsParams = {
-            TableName: ratingsTable,
-            Key: {
-              meetupId: meetupId,
-            },
-          };
-          const ratingsResult = await dynamoDbUtils.getItem(ratingsParams);
-          const rating = ratingsResult.Item;
-      
-          if (!rating || rating.length <= 0) {
-            throw new Error("Rating not found");
-          }
-
         const params = {
           TableName: ratingsTable,
           IndexName: "meetupIndex",
@@ -122,8 +109,14 @@ export const displayRatings = async () => {
             ":meetupId": meetupId
           }
         };
-    
+
         const result = await dynamoDbUtils.query(params);
+
+        if (!result.Items || result.Items.length === 0) {
+            throw new Error("No ratings found");
+        }
+
+        
         return result.Items || [];
     } catch (error) {
       throw new Error("Database error - Failed to display ratings");
