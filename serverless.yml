@@ -157,25 +157,16 @@ resources:
         AttributeDefinitions:
           - AttributeName: meetupId
             AttributeType: S
-          - AttributeName: title
-            AttributeType: S
           - AttributeName: location
             AttributeType: S
           - AttributeName: time
             AttributeType: S
-          # category must be included, it's in user story
           - AttributeName: category
             AttributeType: S
         KeySchema:
           - AttributeName: meetupId
             KeyType: HASH
         GlobalSecondaryIndexes:
-          - IndexName: titleIndex
-            KeySchema:
-              - AttributeName: title
-                KeyType: HASH
-            Projection:
-              ProjectionType: ALL
           - IndexName: locationIndex
             KeySchema:
               - AttributeName: location
