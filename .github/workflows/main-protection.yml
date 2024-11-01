@@ -1,0 +1,16 @@
+name: Main Branch Protection
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-branch:
+    runs-on: ubuntu-latest
+    if: github.head_ref != 'dev'
+    steps:
+      - run: |
+          echo "Merges to main are only allowed from dev branch"
+          echo "⚠️ Current branch: ${{ github.head_ref }} ⚠️"
+          exit 1

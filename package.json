@@ -5,7 +5,9 @@
   "main": "handler.js",
   "scripts": {
     "deploy:dev": "serverless deploy --stage dev --verbose",
+    "deploy:prod": "serverless deploy --stage prod --verbose",
     "invoke:dev-data": "sls invoke -f LoadInData --stage dev",
+    "invoke:prod-data": "sls invoke -f LoadInData --stage prod",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
