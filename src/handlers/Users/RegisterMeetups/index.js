@@ -17,7 +17,8 @@ const registrationHandler = async (event) => {
     return sendSuccessResponse(201, { message: "User registered to meetup" });
   } catch (error) {
     const errorMap = {
-      "Database error - Failed to add registration": 500,
+      "Database error - failed to complete registration": 500,
+      "Database error - failed to add registration": 500,
       "Cannot register for past meetups": 400,
       "This meetup is already fully booked": 400,
       "User is already registered for this meetup": 400,

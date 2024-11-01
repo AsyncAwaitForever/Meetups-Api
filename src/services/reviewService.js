@@ -7,14 +7,14 @@ const meetupsTable = process.env.MEETUPS_TABLE;
 const ratingsTable = process.env.RATINGS_TABLE;
 
 export const addRating = async (userId, meetupId, stars, text) => {
-  try {
-    if (!Number.isInteger(stars) || stars < 1 || stars > 5) {
-      throw new Error("Stars must be a whole number between 1 and 5");
-    }
-    if (typeof text !== "string" || text.trim() === "") {
-      throw new Error("Text cannot be empty");
-    }
+  if (!Number.isInteger(stars) || stars < 1 || stars > 5) {
+    throw new Error("Stars must be a whole number between 1 and 5");
+  }
+  if (typeof text !== "string" || text.trim() === "") {
+    throw new Error("Text cannot be empty");
+  }
 
+  try {
     const user = await getUserById(userId);
 
     const meetupParams = {
@@ -78,40 +78,14 @@ export const addRating = async (userId, meetupId, stars, text) => {
 
     return { success: true, message: "review added successfully" };
   } catch (error) {
-    throw new Error("Database error - Failed to add registration");
-  }
-};
-
-export const displayRatings = async () => {
-  try {
-    const ratingParams = {
-      TableName: ratingsTable,
-    };
-    const ratingResponse = await dynamoDbUtils.scanItems(ratingParams);
-
-    if (!ratingResponse.Items || ratingResponse.Items.length === 0) {
-      return [];
+    if (
+      error.message.includes("Meetup not found") ||
+      error.message.includes("User is not registered") ||
+      error.message.includes("User has already reviewed")
+    ) {
+      throw error;
     }
-
-    return ratingResponse.Items;
-  } catch (error) {
-    throw new Error("Database error - Failed to display ratings");
-  }
-};
-
-export const getMeetupById = async (meetupId) => {
-  try {
-    const params = {
-      TableName: meetupsTable,
-      Key: {
-        meetupId: meetupId,
-      },
-    };
-
-    const result = await dynamoDbUtils.getItem(params);
-    return result.Item;
-  } catch (error) {
-    throw new Error("Database error - failed to get meetup");
+    throw new Error("Database error - failed to add rating");
   }
 };
 
@@ -128,9 +102,8 @@ export const displayMeetupRatings = async (meetupId) => {
         ":meetupId": meetupId,
       },
     };
-    console.log("Query params:", JSON.stringify(params, null, 2));
     const result = await dynamoDbUtils.queryItems(params);
-    console.log("Query result:", JSON.stringify(result, null, 2));
+
     const items = result.Items || [];
 
     if (items.length === 0) {
@@ -139,8 +112,6 @@ export const displayMeetupRatings = async (meetupId) => {
 
     return items;
   } catch (error) {
-    console.error("Error in displayMeetupRatings:", error);
-    console.error("Error stack:", error.stack);
     throw new Error("Database error - Failed to display ratings");
   }
 };

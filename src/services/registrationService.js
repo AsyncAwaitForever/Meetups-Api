@@ -35,37 +35,51 @@ export const addRegistration = async (meetupId, userId) => {
     const registrationResponse = await dynamoDbUtils.getItem(
       registrationParams
     );
-    const registration = registrationResponse.Item;
 
-    if (registration) {
+    if (registrationResponse.Item) {
       throw new Error("User is already registered for this meetup");
     }
 
-    const updatedCapacity = meetup.availableCapacity - 1;
+    try {
+      const updatedCapacity = meetup.availableCapacity - 1;
 
-    const updateParams = {
-      TableName: meetupsTable,
-      Key: {
-        meetupId: meetupId,
-      },
-      UpdateExpression: "SET availableCapacity = :capacity",
-      ExpressionAttributeValues: {
-        ":capacity": updatedCapacity,
-      },
-    };
+      const updateParams = {
+        TableName: meetupsTable,
+        Key: {
+          meetupId: meetupId,
+        },
+        UpdateExpression: "SET availableCapacity = :capacity",
+        ExpressionAttributeValues: {
+          ":capacity": updatedCapacity,
+        },
+      };
 
-    await dynamoDbUtils.updateItem(updateParams);
-
-    const params = {
-      TableName: registrationsTable,
-      Item: {
-        meetupId: meetupId,
-        userId: userId,
-      },
-    };
-    await dynamoDbUtils.putItem(params);
+      const addRegistrationParams = {
+        TableName: registrationsTable,
+        Item: {
+          meetupId: meetupId,
+          userId: userId,
+        },
+      };
+      await dynamoDbUtils.updateItem(updateParams);
+      await dynamoDbUtils.putItem(addRegistrationParams);
+      return {
+        success: true,
+        message: "Registration successful",
+      };
+    } catch (dbError) {
+      throw new Error("Database error - failed to complete registration");
+    }
   } catch (error) {
-    throw new Error("Database error - Failed to add registration");
+    if (
+      error.message.includes("Meetup not found") ||
+      error.message.includes("Cannot register for past meetups") ||
+      error.message.includes("already fully booked") ||
+      error.message.includes("already registered")
+    ) {
+      throw error;
+    }
+    throw new Error("Database error - failed to add registration");
   }
 };
 
@@ -98,40 +112,46 @@ export const removeRegistration = async (meetupId, userId) => {
     const registrationResponse = await dynamoDbUtils.getItem(
       registrationParams
     );
-    const registration = registrationResponse.Item;
 
-    if (!registration) {
+    if (!registrationResponse.Item) {
       throw new Error("User is not registered for this meetup");
     }
 
-    const deleteParams = {
-      TableName: registrationsTable,
-      Key: {
-        meetupId: meetupId,
-        userId: userId,
-      },
-      ReturnValues: "ALL_OLD",
-    };
+    try {
+      const deleteParams = {
+        TableName: registrationsTable,
+        Key: {
+          meetupId: meetupId,
+          userId: userId,
+        },
+        ReturnValues: "ALL_OLD",
+      };
 
-    const deletedData = await dynamoDbUtils.deleteItem(deleteParams);
+      const updateParams = {
+        TableName: meetupsTable,
+        Key: {
+          meetupId: meetupId,
+        },
+        UpdateExpression: "SET availableCapacity = :capacity",
+        ExpressionAttributeValues: {
+          ":capacity": meetup.availableCapacity + 1,
+        },
+      };
+      const deletedData = await dynamoDbUtils.deleteItem(deleteParams);
+      await dynamoDbUtils.updateItem(updateParams);
 
-    const updatedCapacity = meetup.availableCapacity + 1;
-
-    const updateParams = {
-      TableName: meetupsTable,
-      Key: {
-        meetupId: meetupId,
-      },
-      UpdateExpression: "SET availableCapacity = :capacity",
-      ExpressionAttributeValues: {
-        ":capacity": updatedCapacity,
-      },
-    };
-
-    await dynamoDbUtils.updateItem(updateParams);
-
-    return deletedData.Attributes;
+      return deletedData.Attributes;
+    } catch (dbError) {
+      throw new Error("Database error - failed to complete unregistration");
+    }
   } catch (error) {
-    throw new Error("Database error - Failed to remove registration");
+    if (
+      error.message.includes("Meetup not found") ||
+      error.message.includes("Cannot unregister from past meetups") ||
+      error.message.includes("User is not registered")
+    ) {
+      throw error;
+    }
+    throw new Error("Database error - failed to remove registration");
   }
 };

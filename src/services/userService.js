@@ -48,18 +48,17 @@ export const signupUser = async (email, password, username) => {
   if (existingEmail) {
     throw new Error(`User with e-mail - ${email} is already registered`);
   }
-
-  const user = {
-    userId,
-    email,
-    password: hashedPassword,
-    username,
-  };
-  const params = {
-    TableName: usersTable,
-    Item: user,
-  };
   try {
+    const user = {
+      userId,
+      email,
+      password: hashedPassword,
+      username,
+    };
+    const params = {
+      TableName: usersTable,
+      Item: user,
+    };
     await dynamoDbUtils.putItem(params);
     return user;
   } catch (error) {
@@ -102,7 +101,6 @@ export const getUserHistory = async (userId) => {
         meetupId: meetup.meetupId,
         title: meetup.title,
         status: meetup.status,
-        //   we must check this, maybe better to have it on self meetup !and pick it up to response from meetup here if needed
       };
     });
 
