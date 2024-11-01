@@ -16,7 +16,7 @@ export const loadMeetups = async () => {
       return { success: false, message: "Meetups already exist" };
     }
 
-    // const currentTime = new Date().toISOString();   //  we can fix this later tu push status also
+    const currentTime = new Date().toISOString(); //  we can fix this later tu push status also
 
     for (const meetup of meetupsData) {
       const params = {
@@ -31,7 +31,7 @@ export const loadMeetups = async () => {
           description: meetup.description.toLowerCase(),
           availableCapacity: meetup.availableCapacity,
           maxCapacity: meetup.maxCapacity,
-          // status: meetup.time < currentTime ? "past" : "upcoming",   // status for meetups objects
+          status: meetup.time < currentTime ? "past" : "upcoming", // status for meetups objects
         },
       };
       await dynamoDbUtils.putItem(params);
@@ -52,7 +52,10 @@ export const listMeetups = async () => {
 
     // -->>>>>>  with this we could be able change/update status each time we list meetups ! <<<<<<<<-------
 
-    /*     const currentTime = new Date().toISOString();
+    if (!result.Items || result.Items.length === 0) {
+      return [];
+    }
+    const currentTime = new Date().toISOString();
 
     const updatePromises = result.Items.map(async (meetup) => {
       const newStatus = meetup.time < currentTime ? "past" : "upcoming";
@@ -77,10 +80,8 @@ export const listMeetups = async () => {
 
       return meetup;
     });
-        const updatedMeetups = await Promise.all(updatePromises);
-        return updatedMeetups; */
-
-    return result.Items;
+    const updatedMeetups = await Promise.all(updatePromises);
+    return updatedMeetups;
   } catch (error) {
     throw new Error("Database error - Failed to list meetups");
   }
@@ -123,52 +124,8 @@ export const searchMeetups = async (keyword) => {
   }
 };
 
-export const queryMeetupsByDate = async (date) => {
+export const scanMeetupsByDate = async (date) => {
   try {
-    /*     const startOfDay = `${date}T00:00:00Z`;
-    const endOfDay = `${date}T23:59:59Z`;
-
-    const params = {
-      TableName: meetupsTable,
-      IndexName: "dateIndex",
-      KeyConditionExpression: "#time BETWEEN :startDate AND :endDate",
-      ExpressionAttributeNames: {
-        "#time": "time",
-      },
-      ExpressionAttributeValues: {
-        ":startDate": startOfDay,
-        ":endDate": endOfDay,
-      },
-    }; */
-
-    /*     const formattedDate = new Date(date).toISOString().split("T")[0];
-    const startOfDay = `${formattedDate}T00:00:00Z`;
-    const endOfDay = `${formattedDate}T23:59:59Z`;
-
-    const params = {
-      TableName: meetupsTable,
-      IndexName: "timeIndex",
-      KeyConditionExpression: "#time BETWEEN :startDate AND :endDate",
-      ExpressionAttributeNames: {
-        "#time": "time",
-      },
-      ExpressionAttributeValues: {
-        ":startDate": startOfDay,
-        ":endDate": endOfDay,
-      },
-    };
-
-    console.log("Query attempt with params:", JSON.stringify(params, null, 2));
-
-    const sampleData = await dynamoDbUtils.scanItems({
-      TableName: meetupsTable,
-      Limit: 1,
-    });
-    console.log("Sample data in DB:", JSON.stringify(sampleData, null, 2));
-
-    const data = await dynamoDbUtils.queryItems(params); */
-    // First, scan all items (since we can't query with BETWEEN on hash key)
-
     const searchDate = new Date(date).toISOString().split("T")[0];
 
     const params = {
@@ -183,7 +140,6 @@ export const queryMeetupsByDate = async (date) => {
       },
     };
 
-    console.log("Query attempt with params:", JSON.stringify(params, null, 2));
     const data = await dynamoDbUtils.scanItems(params);
     return data.Items;
   } catch (error) {
@@ -243,7 +199,7 @@ export const queryMeetupsWithOptions = async (options) => {
 
     console.log("Options received:", options);
     if (date && category && location) {
-      results = await queryMeetupsByDate(date);
+      results = await scanMeetupsByDate(date);
       results = results.filter(
         (meetup) => meetup.category === category && meetup.location === location
       );
@@ -251,16 +207,16 @@ export const queryMeetupsWithOptions = async (options) => {
     }
 
     if (date && category) {
-      results = await queryMeetupsByDate(date);
+      results = await scanMeetupsByDate(date);
       results = results.filter((meetup) => meetup.category === category);
     } else if (date && location) {
-      results = await queryMeetupsByDate(date);
+      results = await scanMeetupsByDate(date);
       results = results.filter((meetup) => meetup.location === location);
     } else if (category && location) {
       results = await queryMeetupsByCategory(category);
       results = results.filter((meetup) => meetup.location === location);
     } else if (date) {
-      results = await queryMeetupsByDate(date);
+      results = await scanMeetupsByDate(date);
     } else if (category) {
       results = await queryMeetupsByCategory(category);
     } else if (location) {

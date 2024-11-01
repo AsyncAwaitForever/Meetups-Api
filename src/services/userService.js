@@ -53,7 +53,7 @@ export const signupUser = async (email, password, username) => {
     userId,
     email,
     password: hashedPassword,
-    username, // if needed !!!
+    username,
   };
   const params = {
     TableName: usersTable,
@@ -101,22 +101,14 @@ export const getUserHistory = async (userId) => {
       return {
         meetupId: meetup.meetupId,
         title: meetup.title,
-        status: registration.status,
+        status: meetup.status,
         //   we must check this, maybe better to have it on self meetup !and pick it up to response from meetup here if needed
       };
     });
 
     const meetups = await Promise.all(meetupPromises);
 
-    /*         const currentDate = new Date().toISOString();
-        const upcomingMeetups = meetups.filter((m) => m.date > currentDate);
-        const pastMeetups = meetups.filter((m) => m.date <= currentDate); */
-
     return meetups;
-    /*     {   
-      upcoming: upcomingMeetups,
-      past: pastMeetups,
-    }; */
   } catch (error) {
     throw new Error("Database error - failed to fetch user");
   }
