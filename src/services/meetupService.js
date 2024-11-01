@@ -24,8 +24,8 @@ export const loadMeetups = async () => {
         Item: {
           meetupId: uuidV4(),
           title: meetup.title.toLowerCase(),
-          category: meetup.category,
-          location: meetup.location,
+          category: meetup.category.toLowerCase(),
+          location: meetup.location.toLowerCase(),
           time: meetup.time,
           host: meetup.host,
           description: meetup.description.toLowerCase(),
