@@ -167,9 +167,8 @@ resources:
             AttributeType: S
           - AttributeName: location
             AttributeType: S
-          - AttributeName: date
+          - AttributeName: time
             AttributeType: S
-          # category must be included, it's in user story
           - AttributeName: category
             AttributeType: S
         KeySchema:
@@ -188,9 +187,9 @@ resources:
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-          - IndexName: dateIndex
+          - IndexName: timeIndex
             KeySchema:
-              - AttributeName: date
+              - AttributeName: time
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
