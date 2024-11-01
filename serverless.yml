@@ -159,8 +159,6 @@ resources:
             AttributeType: S
           - AttributeName: location
             AttributeType: S
-          - AttributeName: time
-            AttributeType: S
           - AttributeName: category
             AttributeType: S
         KeySchema:
@@ -170,12 +168,6 @@ resources:
           - IndexName: locationIndex
             KeySchema:
               - AttributeName: location
-                KeyType: HASH
-            Projection:
-              ProjectionType: ALL
-          - IndexName: timeIndex
-            KeySchema:
-              - AttributeName: time
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
