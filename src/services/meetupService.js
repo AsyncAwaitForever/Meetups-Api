@@ -168,6 +168,9 @@ export const queryMeetupsByDate = async (date) => {
 
     const data = await dynamoDbUtils.queryItems(params); */
     // First, scan all items (since we can't query with BETWEEN on hash key)
+
+    const searchDate = new Date(date).toISOString().split("T")[0];
+
     const params = {
       TableName: meetupsTable,
       FilterExpression: "#time BETWEEN :startDate AND :endDate",
@@ -175,8 +178,8 @@ export const queryMeetupsByDate = async (date) => {
         "#time": "time",
       },
       ExpressionAttributeValues: {
-        ":startDate": `${date}T00:00:00Z`,
-        ":endDate": `${date}T23:59:59Z`,
+        ":startDate": `${searchDate}T00:00:00Z`,
+        ":endDate": `${searchDate}T23:59:59Z`,
       },
     };
 
