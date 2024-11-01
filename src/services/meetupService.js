@@ -142,17 +142,19 @@ export const queryMeetupsByDate = async (date) => {
     }; */
 
     const formattedDate = new Date(date).toISOString().split("T")[0];
-    const searchDate = `${formattedDate}T`;
+    const startOfDay = `${formattedDate}T00:00:00Z`;
+    const endOfDay = `${formattedDate}T23:59:59Z`;
 
     const params = {
       TableName: meetupsTable,
       IndexName: "timeIndex",
-      KeyConditionExpression: "begins_with(#time, :searchDate)",
+      KeyConditionExpression: "#time BETWEEN :startDate AND :endDate",
       ExpressionAttributeNames: {
         "#time": "time",
       },
       ExpressionAttributeValues: {
-        ":searchDate": searchDate,
+        ":startDate": startOfDay,
+        ":endDate": endOfDay,
       },
     };
 
