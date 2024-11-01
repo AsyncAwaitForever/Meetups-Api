@@ -7,7 +7,8 @@
     "host": "Jane Doe",
     "description": "some text",
     "availableCapacity": 50,
-    "maxCapacity": 50
+    "maxCapacity": 50,
+    "status": "upcoming"
   },
   {
     "title": "Tech Talks: AI Innovations",
@@ -17,7 +18,8 @@
     "host": "John Smith",
     "description": "some text",
     "availableCapacity": 50,
-    "maxCapacity": 50
+    "maxCapacity": 50,
+    "status": "upcoming"
   },
   {
     "title": "Cooking Class: Italian Cuisine",
@@ -27,7 +29,8 @@
     "host": "Chef Mario",
     "description": "some text",
     "availableCapacity": 50,
-    "maxCapacity": 50
+    "maxCapacity": 50,
+    "status": "upcoming"
   },
   {
     "title": "Photography Walk",
@@ -37,7 +40,8 @@
     "host": "Emily Brown",
     "description": "some text",
     "availableCapacity": 50,
-    "maxCapacity": 50
+    "maxCapacity": 50,
+    "status": "upcoming"
   },
   {
     "title": "Book Club: Fantasy Novels",
@@ -47,6 +51,7 @@
     "host": "Sarah Johnson",
     "description": "some text",
     "availableCapacity": 50,
-    "maxCapacity": 50
+    "maxCapacity": 50,
+    "status": "upcoming"
   }
 ]

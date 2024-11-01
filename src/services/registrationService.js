@@ -61,8 +61,6 @@ export const addRegistration = async (meetupId, userId) => {
       Item: {
         meetupId: meetupId,
         userId: userId,
-        status: "upcoming", //  store status like 'upcoming', 'past'
-        //   we must check this, maybe better to have it on self meetup !and pick it up to response from meetup here if needed
       },
     };
     await dynamoDbUtils.putItem(params);
