@@ -115,17 +115,11 @@ functions:
           path: /meetups/{meetupId}/unregister
           method: delete
   addRating:
-    handler: src/handlers/Meetups/AddRating/index.handler
+    handler: src/handlers/Users/AddRating/index.handler
     events:
       - httpApi:
           path: /meetups/{meetupId}/ratings
           method: post
-  displayRatings:
-    handler: src/handlers/Meetups/DisplayRatings/index.handler
-    events:
-      - httpApi:
-          path: /meetups/ratings
-          method: get
   meetupRatings:
     handler: src/handlers/Meetups/MeetupRatings/index.handler
     events:

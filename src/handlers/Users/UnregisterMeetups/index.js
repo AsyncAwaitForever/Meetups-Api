@@ -22,10 +22,11 @@ const unregisterHandler = async (event) => {
     });
   } catch (error) {
     const errorMap = {
-      "Database error - Failed to remove registration": 500,
-      "Cannot unregister from past meetups": 400,
       "Meetup not found": 404,
+      "Cannot unregister from past meetups": 400,
       "User is not registered for this meetup": 404,
+      "Database error - failed to remove registration": 500,
+      "Database error - failed to complete unregistration": 500,
     };
 
     const statusCode = errorMap[error.message] || 500;

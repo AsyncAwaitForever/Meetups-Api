@@ -31,7 +31,7 @@ const ratingHandler = async (event) => {
       "Meetup not found": 404,
       "User is not registered for this meetup": 400,
       "User has already reviewed this meetup": 400,
-      "Database error - Failed to add registration": 500,
+      "Database error - failed to add rating": 500,
     };
 
     const statusCode = errorMap[error.message] || 500;

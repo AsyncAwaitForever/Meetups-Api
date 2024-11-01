@@ -12,7 +12,6 @@ export const loadMeetups = async () => {
     });
 
     if (existingMeetups.Items && existingMeetups.Items.length > 0) {
-      console.log("Meetups already exist");
       return { success: false, message: "Meetups already exist" };
     }
 
@@ -36,7 +35,6 @@ export const loadMeetups = async () => {
       };
       await dynamoDbUtils.putItem(params);
     }
-    console.log("Meetups loaded successfully.");
     return { success: true, message: "Meetups loaded successfully" };
   } catch (error) {
     throw new Error("Database error - failed to load meetups");
@@ -49,8 +47,6 @@ export const listMeetups = async () => {
       TableName: meetupsTable,
     };
     const result = await dynamoDbUtils.scanItems(params);
-
-    // -->>>>>>  with this we could be able change/update status each time we list meetups ! <<<<<<<<-------
 
     if (!result.Items || result.Items.length === 0) {
       return [];
@@ -143,7 +139,6 @@ export const scanMeetupsByDate = async (date) => {
     const data = await dynamoDbUtils.scanItems(params);
     return data.Items;
   } catch (error) {
-    console.error("Full error details:", error);
     throw new Error("Database error - failed to filter/query meetups by date");
   }
 };
@@ -231,7 +226,6 @@ export const queryMeetupsWithOptions = async (options) => {
 
     return results;
   } catch (error) {
-    console.error("Query error:", error);
     throw new Error("Database error - failed to query meetups");
   }
 };
