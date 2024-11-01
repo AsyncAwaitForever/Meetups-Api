@@ -29,9 +29,22 @@ export const deleteItem = async (params) => {
   return dynamoDb.send(command);
 };
 
-export const queryItems = async (params) => {
+/* export const queryItems = async (params) => {
   const command = new QueryCommand(params);
   return dynamoDb.send(command);
+}; */
+export const queryItems = async (params) => {
+  try {
+    const command = new QueryCommand(params);
+    const response = await dynamoDbClient.send(command);
+    return response;
+  } catch (error) {
+    console.error("DynamoDB Query Error:", {
+      error: error.message,
+      params: params,
+    });
+    throw error;
+  }
 };
 
 export const scanItems = async (params) => {

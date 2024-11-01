@@ -156,10 +156,18 @@ export const queryMeetupsByDate = async (date) => {
       },
     };
 
-    console.log("Query params:", params);
+    console.log("Query attempt with params:", JSON.stringify(params, null, 2));
+
+    const sampleData = await dynamoDbUtils.scanItems({
+      TableName: meetupsTable,
+      Limit: 1,
+    });
+    console.log("Sample data in DB:", JSON.stringify(sampleData, null, 2));
+
     const data = await dynamoDbUtils.queryItems(params);
     return data.Items;
   } catch (error) {
+    console.error("Full error details:", error);
     throw new Error("Database error - failed to filter/query meetups by date");
   }
 };
