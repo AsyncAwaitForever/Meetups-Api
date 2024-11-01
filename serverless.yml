@@ -187,12 +187,12 @@ resources:
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-          # - IndexName: timeIndex
-          #   KeySchema:
-          #     - AttributeName: time
-          #       KeyType: HASH
-          #   Projection:
-          #     ProjectionType: ALL
+          - IndexName: timeIndex
+            KeySchema:
+              - AttributeName: time
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
           - IndexName: categoryIndex
             KeySchema:
               - AttributeName: category
