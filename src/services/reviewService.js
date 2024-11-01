@@ -1,6 +1,8 @@
 import * as dynamoDbUtils from "../utils/dynamoDbUtils";
 import { v4 as uuidV4 } from "uuid";
-//const registrationsTable = process.env.REGISTRATIONS_TABLE;
+import { getUserById } from "./userService";
+
+const registrationsTable = process.env.REGISTRATIONS_TABLE;
 const meetupsTable = process.env.MEETUPS_TABLE;
 const ratingsTable = process.env.RATINGS_TABLE;
 
@@ -13,6 +15,8 @@ export const addRating = async (userId, meetupId, stars, text) => {
       throw new Error("Text cannot be empty");
     }
 
+    const user = await getUserById(userId);
+
     const meetupParams = {
       TableName: meetupsTable,
       Key: {
@@ -24,6 +28,22 @@ export const addRating = async (userId, meetupId, stars, text) => {
 
     if (!meetup) {
       throw new Error("Meetup not found");
+    }
+
+    const isRegisteredParams = {
+      TableName: registrationsTable,
+      Key: {
+        meetupId: meetupId,
+        userId: userId,
+      },
+    };
+
+    const registrationResponse = await dynamoDbUtils.getItem(
+      isRegisteredParams
+    );
+    const registration = registrationResponse.Item;
+    if (!registration) {
+      throw new Error("User is not registered for this meetup");
     }
 
     const ratingParams = {
@@ -47,6 +67,7 @@ export const addRating = async (userId, meetupId, stars, text) => {
       Item: {
         ratingId: ratingId,
         userId: userId,
+        username: user.username,
         meetupId: meetupId,
         stars: stars,
         text: text,
