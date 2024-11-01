@@ -141,7 +141,7 @@ export const queryMeetupsByDate = async (date) => {
       },
     }; */
 
-    const formattedDate = new Date(date).toISOString().split("T")[0];
+    /*     const formattedDate = new Date(date).toISOString().split("T")[0];
     const startOfDay = `${formattedDate}T00:00:00Z`;
     const endOfDay = `${formattedDate}T23:59:59Z`;
 
@@ -166,7 +166,22 @@ export const queryMeetupsByDate = async (date) => {
     });
     console.log("Sample data in DB:", JSON.stringify(sampleData, null, 2));
 
-    const data = await dynamoDbUtils.queryItems(params);
+    const data = await dynamoDbUtils.queryItems(params); */
+    // First, scan all items (since we can't query with BETWEEN on hash key)
+    const params = {
+      TableName: meetupsTable,
+      FilterExpression: "#time BETWEEN :startDate AND :endDate",
+      ExpressionAttributeNames: {
+        "#time": "time",
+      },
+      ExpressionAttributeValues: {
+        ":startDate": `${date}T00:00:00Z`,
+        ":endDate": `${date}T23:59:59Z`,
+      },
+    };
+
+    console.log("Query attempt with params:", JSON.stringify(params, null, 2));
+    const data = await dynamoDbUtils.scanItems(params);
     return data.Items;
   } catch (error) {
     console.error("Full error details:", error);
