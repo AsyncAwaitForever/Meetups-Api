@@ -141,7 +141,8 @@ export const queryMeetupsByDate = async (date) => {
       },
     }; */
 
-    const searchDate = `${date}T`;
+    const formattedDate = new Date(date).toISOString().split("T")[0];
+    const searchDate = `${formattedDate}T`;
 
     const params = {
       TableName: meetupsTable,
